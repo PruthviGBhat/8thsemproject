@@ -11,12 +11,12 @@ import {
 export default function Header() {
   
   return (
-    <header className='bg-slate-200 shadow-md'>
+    <header className='bg-blue-900 shadow-md'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link href='/'>
           <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-            <span className='text-slate-500'>Easy</span>
-            <span className='text-slate-700'>Estate</span>
+            <span className='text-gray-400'>Easy</span>
+            <span className='text-white'>Estate</span>
           </h1>
         </Link>
         <form
@@ -33,12 +33,12 @@ export default function Header() {
         </form>
         <ul className='flex gap-4'>
           <Link href='/'>
-            <li className='hidden md:inline text-slate-700 hover:underline'>
+            <li className='hidden md:inline text-white hover:underline'>
               Home
             </li>
           </Link>
           <Link href='/about'>
-            <li className='hidden md:inline text-slate-700 hover:underline'>
+            <li className='hidden md:inline text-white hover:underline'>
               About
             </li>
           </Link>
@@ -47,7 +47,7 @@ export default function Header() {
           </SignedIn>
           <SignedOut>
             <Link href='/sign-in'>
-              <li className='hidden md:inline text-slate-700 hover:underline'>
+              <li className='hidden md:inline text-white hover:underline'>
                 Sign In
               </li>
             </Link>
