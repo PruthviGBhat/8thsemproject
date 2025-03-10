@@ -1,6 +1,43 @@
 import Image from "next/image";
+import Link from "next/link";
+import ListingItem from "./components/ListingItem.jsx";
 
-export default function Home() {
+
+export default async function Home() {
+  let rentListings = null;
+  try {
+    const result = await fetch(process.env.URL + '/api/listing/get', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'rent',
+        limit: 4,
+        order: 'asc',
+      }),
+      cache: 'no-store',
+    });
+    const data = await result.json();
+    rentListings = data;
+  } catch (error) {
+    rentListings = { title: 'Failed to load listing' };
+  }
+  let saleListings = null;
+  try {
+    const result = await fetch(process.env.URL + '/api/listing/get', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'sale',
+        limit: 4,
+        order: 'asc',
+      }),
+      cache: 'no-store',
+    });
+    const data = await result.json();
+    saleListings = data;
+  } catch (error) {
+    saleListings = { title: 'Failed to load listing' };
+  }
+  
+  
   return (
     <>
       <div>
@@ -16,105 +53,73 @@ export default function Home() {
       <br />
       We have a wide range of properties for you to choose from.
     </div>
-    <a
-      href='#'
+    <Link
+      href={'/createListing'}  
       className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
     >
-      Let&apos;s get started...
-    </a>
-       
+      <button className='bg-green-700 text-white focus:outline-none w-16 sm:w-40 h-10 '>List Sites</button>
+     
+    </Link>
+    <Link
+      href={'/landrecords.karnataka.gov.in/Service2/'}  
+      className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
+    >
+       <button className='bg-green-700 text-white focus:outline-none w-16 sm:w-40 h-10 '>Verify with Govt.</button>
+     
+    </Link>
+
+
   </div>
   <img
     src='https://www.luxuryvillasstay.com/wp-content/uploads/2023/05/luxury1.jpg'
     className='ml-36 w-5/6 h-[550px] object-cover'
   />
   <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
-    {/* Static Offer Listings */}
-    <div className=''>
-      <div className='my-3'>
-        <h2 className='text-2xl font-semibold text-slate-600'>
-          Recent Offers
-        </h2>
-        <a
-          className='text-sm text-blue-800 hover:underline'
-          href='#'
-        >
-          Show more listings
-        </a>
-      </div>
-      <div className='flex flex-wrap gap-4'>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Luxury Apartment</h3>
-          <p className='text-gray-600'>$300,000</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Cozy Cottage</h3>
-          <p className='text-gray-600'>$150,000</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Modern Loft</h3>
-          <p className='text-gray-600'>$250,000</p>
-        </div>
-      </div>
-    </div>
+    
 
-    {/* Static Rent Listings */}
-    <div className=''>
-      <div className='my-3'>
-        <h2 className='text-2xl font-semibold text-slate-600'>
-          Recent places for rent
-        </h2>
-        <a
-          className='text-sm text-blue-800 hover:underline'
-          href='#'
-        >
-          Show more places for rent
-        </a>
-      </div>
-      <div className='flex flex-wrap gap-4'>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>1 Bedroom Apartment</h3>
-          <p className='text-gray-600'>$1,200/month</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>2 Bedroom Condo</h3>
-          <p className='text-gray-600'>$1,500/month</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Studio Apartment</h3>
-          <p className='text-gray-600'>$900/month</p>
-        </div>
-      </div>
-    </div>
+    
 
-    {/* Static Sale Listings */}
-    <div className=''>
-      <div className='my-3'>
-        <h2 className='text-2xl font-semibold text-slate-600'>
-          Recent places for sale
-        </h2>
-        <a
-          className='text-sm text-blue-800 hover:underline'
-          href={'/search?type=sale'}
-        >
-          Show more places for sale
-        </a>
-      </div>
-      <div className='flex flex-wrap gap-4'>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Family Home</h3>
-          <p className='text-gray-600'>$400,000</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Beachfront Property</h3>
-          <p className='text-gray-600'>$1,000,000</p>
-        </div>
-        <div className='border p-4 rounded shadow'>
-          <h3 className='font-semibold'>Country House</h3>
-          <p className='text-gray-600'>$350,000</p>
-        </div>
-      </div>
-    </div>
+  {rentListings && rentListings.length > 0 && (
+          <div className=''>
+            <div className='my-3'>
+              <h2 className='text-2xl font-semibold text-slate-600'>
+                Recent places for rent
+              </h2>
+              <Link
+                className='text-sm text-blue-800 hover:underline'
+                href={'/search?type=rent'}
+              >
+                Show more places for rent
+              </Link>
+            </div>
+            <div className='flex flex-wrap gap-4'>
+              {rentListings.map((listing) => (
+                <ListingItem listing={listing} key={listing.id} />
+              ))}
+            </div>
+          </div>
+        )}
+        {saleListings && saleListings.length > 0 && (
+          <div className=''>
+            <div className='my-3'>
+              <h2 className='text-2xl font-semibold text-slate-600'>
+                Recent places for sale
+              </h2>
+              <Link
+                className='text-sm text-blue-800 hover:underline'
+                href={'/search?type=sale'}
+              >
+                Show more places for sale
+              </Link>
+            </div>
+            <div className='flex flex-wrap gap-4'>
+              {saleListings.map((listing) => (
+                <ListingItem listing={listing} key={listing.id} />
+              ))}
+            </div>
+          </div>
+        )}
+
   </div>
 </div>
     </>
