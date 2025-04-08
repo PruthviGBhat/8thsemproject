@@ -64,7 +64,7 @@ export default async function Home() {
                     List Your Property
                   </button>
                 </Link>
-                <Link href={'/landrecords.karnataka.gov.in/Service2/'}>
+                <Link target='_blank' href={'https://landrecords.karnataka.gov.in/Service2/'}>
                   <button className='bg-green-600 hover:bg-green-700 transition-colors text-white font-medium py-3 px-6 rounded-lg w-full sm:w-auto'>
                     Verify with Government
                   </button>
